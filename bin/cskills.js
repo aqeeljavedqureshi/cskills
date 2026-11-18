@@ -44,8 +44,8 @@ By default, installs to ~/.agents/skills (global).
 --agent selects agent-specific paths; repeat or comma-separate agent names.
 --force replaces existing skill folders (otherwise skipped).
 Examples:
-  cskills install checkstory
-  cskills install askmore whatif --agent claude-code,cursor
+  cskills install check-story
+  cskills install ask-more what-if --agent claude-code,cursor
   cskills install --all --agent opencode --local
 `;
 }
