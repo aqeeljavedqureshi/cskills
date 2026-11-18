@@ -1,56 +1,44 @@
 # cskills
 
-**Seven independent, interactive AI agent skills for clarifying software user stories.**
+Generate concise React application documentation with [frontend-docs-generator](skills/frontend-docs-generator/SKILL.md).
 
-Each skill is a standalone `SKILL.md` folder. The optional, dependency-free CLI can install skills into shared or agent-specific directories on Windows, macOS, and Linux.
+## Included skill
 
-## Available skills
+**frontend-docs-generator** delegates 12 documentation areas to separate specialist agents. It writes Markdown under the target project's `docs/` folder and adds a navigation index at the top of `AGENTS.md`, preserving existing instructions.
 
-| Skill | Method | Purpose |
-| --- | --- | --- |
-| [ask-more](skills/ask-more/SKILL.md) | 5W1H | Discover missing business context |
-| [check-context](skills/check-context/SKILL.md) | Context analysis | Inspect existing project behavior |
-| [what-if](skills/what-if/SKILL.md) | Example Mapping | Explore rules and edge cases |
-| [ask-why](skills/ask-why/SKILL.md) | Socratic questioning | Challenge assumptions |
-| [set-criteria](skills/set-criteria/SKILL.md) | BDD | Define testable acceptance criteria |
-| [check-story](skills/check-story/SKILL.md) | INVEST | Review story quality |
-| [set-priority](skills/set-priority/SKILL.md) | MoSCoW | Clarify release priorities |
+- Cover purpose, domain rules, users and access, features, routes, architecture, conventions, state, APIs, UI, runtime, and verification.
+- Keep documents high-level and actionable, targeting 200–400 words or fewer with a 400-word limit on generated content.
+- Collect clarification questions and resume affected specialists after user answers.
+- Repeat clarification until all specialists explicitly report no remaining questions.
+- Use native sub-agent support and queue work within the host's available capacity.
 
-## Installation with CLI
+Running the skill requires an agent host with sub-agent support and access to the target React repository. Installation targets below configure file placement. The selected host must also support running sub-agents.
 
-**Note:** The npm package is not published yet. Until then, clone this repository and use the CLI locally.
+## Install
+
+Requires Node.js 18.17 or newer for the dependency-free installer.
 
 ```bash
 git clone https://github.com/aqeeljavedqureshi/cskills.git
 cd cskills
 node bin/cskills.js list
-node bin/cskills.js install check-story
+node bin/cskills.js install frontend-docs-generator
 ```
 
-Once the package has been published to npm, equivalent commands can use `npx cskills`:
+The default installation goes to `~/.agents/skills/frontend-docs-generator/`.
 
 ```bash
-npx cskills list
-npx cskills agents
-npx cskills install check-story
-npx cskills install --all
-npx cskills install ask-more what-if
-npx cskills install check-story --local
-npx cskills install check-story --agent claude-code
-npx cskills install --all --agent cursor,opencode --local
+node bin/cskills.js install frontend-docs-generator --local
+node bin/cskills.js install frontend-docs-generator --agent claude-code
+node bin/cskills.js install --all --agent cursor,opencode --local
+node bin/cskills.js agents
 ```
 
-### Default install location
+`--local` installs under the current working directory. Run project-local installation from your target React repository using the absolute path to `bin/cskills.js`. Existing destination folders are skipped. Use `--force` to replace a destination folder and its local changes. `--all` installs the single bundled skill.
 
-**Global by default:** `~/.agents/skills/<skill>/SKILL.md`
+These commands use the repository directly. npm registry publication is a separate operation.
 
-**Project-local with `--local`:** `./.agents/skills/<skill>/SKILL.md`
-
-The shared location is agent-agnostic. Individual AI coding tools must support discovering this directory, or you should select a tool-specific directory with `--agent`.
-
-### Agent-specific installation
-
-Use `--agent <name>` to choose installation directories; use `--local` for the repository/project-level path.
+## Agent installation targets
 
 | Agent target | Project-local directory | User-wide directory |
 | --- | --- | --- |
@@ -73,42 +61,24 @@ Aliases: `claude`, `gemini`, `copilot`, `roo-code`.
 
 These paths are CLI installation targets, not a guarantee that every version of every agent automatically discovers all of them. Agent support changes: check your agent's documentation and configure discovery if needed.
 
-### Safety and flags
+## Use
 
-- `--all` installs all bundled skills.
-- `--agent name[,name]` targets one or multiple agents (repeatable).
-- `--local` installs in the current working directory's project configuration.
-- Existing skill folders are **skipped by default**.
-- `--force` **replaces** existing skill directories; use only when you want to overwrite local changes.
-- Unknown skill or agent names fail with an error.
+Ask your agent to run the installed skill against your React application.
 
-## Using skills
+> Use frontend-docs-generator to explore this React application, generate concise documentation, and ask me about anything unclear.
 
-Ask an agent to invoke an installed skill, for example:
+Answer the consolidated clarification questions. The main agent resumes the relevant specialists, updates their documents, and asks any newly discovered questions. Partial answers keep unresolved questions open.
 
-> Use ask-more to clarify this Jira user story. Ask important questions and wait for my answers.
-
-> Use check-story to review this story with INVEST and distinguish risks from unknowns.
-
-Each skill is **independent**. No orchestration skill, other skill, or remote service is required. A skill name is not automatically a slash command; command support depends on your agent.
-
-### Interactive approach
-
-1. Analyze available story context and evidence.
-2. Ask up to three important questions per round.
-3. Wait for stakeholder answers rather than guessing.
-4. Reassess and stop when the skill's goal is satisfied.
+The skill's [area map](skills/frontend-docs-generator/references/areas.md) defines all 12 assignments and proposed filenames. The index describes when to read each document and what it governs, so agents can load the documents relevant to their task.
 
 ## Development
-
-Requires Node.js 18.17 or newer.
 
 ```bash
 npm test
 npm pack --dry-run
 ```
 
-CI validates tests and packaging on supported Node.js versions. npm registry publication is a separate operation that requires package-name availability and npm publishing credentials.
+CI runs the existing test and packaging checks.
 
 ## License
 

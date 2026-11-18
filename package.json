@@ -1,7 +1,7 @@
 {
   "name": "cskills",
   "version": "0.1.0",
-  "description": "Interactive story-clarification agent skills and multi-agent CLI installer",
+  "description": "Concise React application documentation through specialist AI agents",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -28,10 +28,10 @@
     "agent-skills",
     "skills",
     "ai-agents",
-    "jira",
-    "user-stories",
-    "bdd",
-    "invest",
+    "react",
+    "frontend",
+    "documentation",
+    "sub-agents",
     "cli"
   ]
 }

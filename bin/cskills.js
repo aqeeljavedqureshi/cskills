@@ -21,7 +21,7 @@ const AGENTS = Object.freeze({
   antigravity: ['.agent/skills', '.gemini/config/skills'],
   'openhands': ['.agents/skills', '.agents/skills']
 });
-const ALIASES = Object.freeze({claude:'claude-code',gemini:'gemini-cli',copilot:'github-copilot',roo-code:'roo'});
+const ALIASES = Object.freeze({claude:'claude-code',gemini:'gemini-cli',copilot:'github-copilot','roo-code':'roo'});
 const SOURCE = path.resolve(__dirname, '..', 'skills');
 
 function availableSkills() {
@@ -44,8 +44,8 @@ By default, installs to ~/.agents/skills (global).
 --agent selects agent-specific paths; repeat or comma-separate agent names.
 --force replaces existing skill folders (otherwise skipped).
 Examples:
-  cskills install check-story
-  cskills install ask-more what-if --agent claude-code,cursor
+  cskills install frontend-docs-generator
+  cskills install frontend-docs-generator --agent claude-code,cursor
   cskills install --all --agent opencode --local
 `;
 }
@@ -69,8 +69,8 @@ function parse(argv) {
 function install(argv, options={}) {
   const out=options.out || console.log;
   const config=parse(argv);
-  if(config.command==='list'){availableSkills().forEach(out);return;}
-  if(config.command==='agents'){Object.keys(AGENTS).forEach(out);return;}
+  if(config.command==='list'){availableSkills().forEach(name=>out(name));return;}
+  if(config.command==='agents'){Object.keys(AGENTS).forEach(name=>out(name));return;}
   if(!config.command || config.command==='help' || config.command==='--help' || config.command==='-h'){out(usage());return;}
   if(config.command!=='install') throw Error('Unknown command: '+config.command+'\n'+usage());
   const available=availableSkills();

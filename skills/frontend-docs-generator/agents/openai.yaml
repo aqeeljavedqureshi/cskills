@@ -1,0 +1,14 @@
+interface:
+  display_name: Frontend Docs Generator
+  short_description: Generate concise React docs with specialist agents
+  default_prompt: Use $frontend-docs-generator to document this React app with specialist
+    agents and resolve all clarification questions.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true
