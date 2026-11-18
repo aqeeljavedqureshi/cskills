@@ -1,70 +1,76 @@
 # cskills
 
-**Small, composable AI agent skills for clarifying ambiguous software user stories.**
+**Seven small, independent AI agent skills for interactive clarification of software user stories.**
 
-Seven independent skills. One `SKILL.md` per skill. No scripts or dependencies.
+Each skill uses a single `SKILL.md` file. No runtime dependencies, scripts, or mandatory orchestration.
 
 ## Skills
 
-| Skill | Purpose | Output |
+| Skill | Method | When to use |
 | --- | --- | --- |
-| [discover-story](skills/discover-story/SKILL.md) | 5W1H discovery | Context and missing information |
-| [inspect-context](skills/inspect-context/SKILL.md) | Codebase and documentation investigation | Verified behavior and gaps |
-| [map-scenarios](skills/map-scenarios/SKILL.md) | Example Mapping | Rules, examples, edge cases |
-| [challenge-assumptions](skills/challenge-assumptions/SKILL.md) | Socratic questioning | High-impact clarification questions |
-| [define-acceptance](skills/define-acceptance/SKILL.md) | BDD | Testable Given/When/Then scenarios |
-| [review-story](skills/review-story/SKILL.md) | INVEST | Story quality assessment |
-| [prioritize-scope](skills/prioritize-scope/SKILL.md) | MoSCoW | Confirmed priorities and open decisions |
+| [askmore](skills/askmore/SKILL.md) | 5W1H | Discover missing business context |
+| [checkcontext](skills/checkcontext/SKILL.md) | Context analysis | Investigate existing code and system behavior |
+| [whatif](skills/whatif/SKILL.md) | Example Mapping | Explore business rules and edge cases |
+| [askwhy](skills/askwhy/SKILL.md) | Socratic questioning | Challenge assumptions and ambiguity |
+| [setcriteria](skills/setcriteria/SKILL.md) | BDD | Define confirmed, testable acceptance criteria |
+| [checkstory](skills/checkstory/SKILL.md) | INVEST | Review story quality and readiness |
+| [setpriority](skills/setpriority/SKILL.md) | MoSCoW | Clarify release scope and priorities |
 
 ## Install
 
-For **OpenCode**, copy any skill folder into `.opencode/skills/` in your project:
+Clone the repository, then copy only the skills you want.
 
 ```bash
-mkdir -p .opencode/skills
-cp -R skills/discover-story .opencode/skills/
+git clone https://github.com/aqeeljavedqureshi/cskills.git
+cd cskills
+
+# OpenCode: project-level installation
+mkdir -p /path/to/your-project/.opencode/skills
+cp -R skills/askmore /path/to/your-project/.opencode/skills/
 ```
 
-For user-wide use, copy folders into `~/.config/opencode/skills/`.
-
-For other Agent Skills-compatible tools, copy each folder to that tool's supported skills directory.
+For user-wide OpenCode skills, use `~/.config/opencode/skills/`. Other Agent Skills-compatible clients use their own supported skills directories.
 
 ## Use
 
-Tell your agent:
+Ask your agent to use a skill by name, for example:
 
-> Use discover-story to analyze this Jira user story. Identify missing information; do not invent answers.
+> Use askmore to clarify this Jira story. Ask up to three important questions at a time and wait for my answers.
 
-Use each skill independently, or combine them:
+> Use checkstory to assess this story against INVEST. Distinguish proven risks from unknowns.
 
-```text
-discover-story → inspect-context → map-scenarios
-       → challenge-assumptions → define-acceptance → review-story
-```
+**Each skill works independently.** You can use one skill without running any others. A slash-command alias such as `/askmore` is available only if your agent client configures one; skill names alone do not guarantee slash commands.
 
-Use `prioritize-scope` only when release scope needs a decision.
+## Interactive behavior
+
+1. Analyze the story and any available evidence.
+2. Ask up to three high-impact questions per round if important decisions are unresolved.
+3. Wait for the user to answer; never fabricate business decisions.
+4. Update the result and stop once the skill's objective is sufficiently clear.
+
+Skills produce their own focused outputs rather than automatically invoking other skills.
 
 ## Example
 
-**Story:** "As a user, I want to export reports."
+**Story:** "As a registered user, I want to sign in using my email and password."
 
-| Skill | Example result |
+| Skill | Example question or result |
 | --- | --- |
-| discover-story | Which users? Which reports? What formats? |
-| inspect-context | Existing report endpoints and permissions |
-| map-scenarios | Filtered export, empty results, permission failure |
-| challenge-assumptions | Should exports contain filtered or all records? |
-| define-acceptance | Given an authorized user, when exporting a filtered report, then... (only after behavior is confirmed) |
-| review-story | Testability and scope gaps |
-| prioritize-scope | Must-have formats versus deferred formats, if approved |
+| askmore | What happens when sign-in fails? |
+| checkcontext | Is there an existing authentication API or login flow? |
+| whatif | Explore valid credentials, invalid credentials, and disabled accounts |
+| askwhy | What does “securely” mean for this product? |
+| setcriteria | Given/When/Then for confirmed login outcomes |
+| checkstory | INVEST assessment, with evidence-based Pass / Risk / Unknown |
+| setpriority | Must/Should/Could/Won't only after release priorities are agreed |
 
-## Ground rules
+## Design principles
 
-- Distinguish confirmed facts, assumptions, and open questions.
-- Prefer existing story, code, tests, and documentation as evidence.
-- Ask only questions that change decisions or acceptance criteria.
-- Never silently turn assumptions into requirements.
-- Keep output concise; critical unresolved decisions block readiness.
+- **Independent:** no skill requires another skill.
+- **Interactive:** ask, wait, and reassess instead of guessing.
+- **Evidence-based:** distinguish verified facts from unknowns.
+- **Focused:** minimize redundant questions and unnecessary output.
+- **Safe boundaries:** no automatic code changes or fabricated requirements.
 
 ## License
 
