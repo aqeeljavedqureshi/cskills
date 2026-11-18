@@ -8,13 +8,13 @@ Each skill is a standalone `SKILL.md` folder. The optional, dependency-free CLI 
 
 | Skill | Method | Purpose |
 | --- | --- | --- |
-| [askmore](skills/askmore/SKILL.md) | 5W1H | Discover missing business context |
-| [checkcontext](skills/checkcontext/SKILL.md) | Context analysis | Inspect existing project behavior |
-| [whatif](skills/whatif/SKILL.md) | Example Mapping | Explore rules and edge cases |
-| [askwhy](skills/askwhy/SKILL.md) | Socratic questioning | Challenge assumptions |
-| [setcriteria](skills/setcriteria/SKILL.md) | BDD | Define testable acceptance criteria |
-| [checkstory](skills/checkstory/SKILL.md) | INVEST | Review story quality |
-| [setpriority](skills/setpriority/SKILL.md) | MoSCoW | Clarify release priorities |
+| [ask-more](skills/ask-more/SKILL.md) | 5W1H | Discover missing business context |
+| [check-context](skills/check-context/SKILL.md) | Context analysis | Inspect existing project behavior |
+| [what-if](skills/what-if/SKILL.md) | Example Mapping | Explore rules and edge cases |
+| [ask-why](skills/ask-why/SKILL.md) | Socratic questioning | Challenge assumptions |
+| [set-criteria](skills/set-criteria/SKILL.md) | BDD | Define testable acceptance criteria |
+| [check-story](skills/check-story/SKILL.md) | INVEST | Review story quality |
+| [set-priority](skills/set-priority/SKILL.md) | MoSCoW | Clarify release priorities |
 
 ## Installation with CLI
 
@@ -24,7 +24,7 @@ Each skill is a standalone `SKILL.md` folder. The optional, dependency-free CLI 
 git clone https://github.com/aqeeljavedqureshi/cskills.git
 cd cskills
 node bin/cskills.js list
-node bin/cskills.js install checkstory
+node bin/cskills.js install check-story
 ```
 
 Once the package has been published to npm, equivalent commands can use `npx cskills`:
@@ -32,11 +32,11 @@ Once the package has been published to npm, equivalent commands can use `npx csk
 ```bash
 npx cskills list
 npx cskills agents
-npx cskills install checkstory
+npx cskills install check-story
 npx cskills install --all
-npx cskills install askmore whatif
-npx cskills install checkstory --local
-npx cskills install checkstory --agent claude-code
+npx cskills install ask-more what-if
+npx cskills install check-story --local
+npx cskills install check-story --agent claude-code
 npx cskills install --all --agent cursor,opencode --local
 ```
 
@@ -86,9 +86,9 @@ These paths are CLI installation targets, not a guarantee that every version of 
 
 Ask an agent to invoke an installed skill, for example:
 
-> Use askmore to clarify this Jira user story. Ask important questions and wait for my answers.
+> Use ask-more to clarify this Jira user story. Ask important questions and wait for my answers.
 
-> Use checkstory to review this story with INVEST and distinguish risks from unknowns.
+> Use check-story to review this story with INVEST and distinguish risks from unknowns.
 
 Each skill is **independent**. No orchestration skill, other skill, or remote service is required. A skill name is not automatically a slash command; command support depends on your agent.
 
