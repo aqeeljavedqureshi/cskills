@@ -1,76 +1,114 @@
 # cskills
 
-**Seven small, independent AI agent skills for interactive clarification of software user stories.**
+**Seven independent, interactive AI agent skills for clarifying software user stories.**
 
-Each skill uses a single `SKILL.md` file. No runtime dependencies, scripts, or mandatory orchestration.
+Each skill is a standalone `SKILL.md` folder. The optional, dependency-free CLI can install skills into shared or agent-specific directories on Windows, macOS, and Linux.
 
-## Skills
+## Available skills
 
-| Skill | Method | When to use |
+| Skill | Method | Purpose |
 | --- | --- | --- |
 | [askmore](skills/askmore/SKILL.md) | 5W1H | Discover missing business context |
-| [checkcontext](skills/checkcontext/SKILL.md) | Context analysis | Investigate existing code and system behavior |
-| [whatif](skills/whatif/SKILL.md) | Example Mapping | Explore business rules and edge cases |
-| [askwhy](skills/askwhy/SKILL.md) | Socratic questioning | Challenge assumptions and ambiguity |
-| [setcriteria](skills/setcriteria/SKILL.md) | BDD | Define confirmed, testable acceptance criteria |
-| [checkstory](skills/checkstory/SKILL.md) | INVEST | Review story quality and readiness |
-| [setpriority](skills/setpriority/SKILL.md) | MoSCoW | Clarify release scope and priorities |
+| [checkcontext](skills/checkcontext/SKILL.md) | Context analysis | Inspect existing project behavior |
+| [whatif](skills/whatif/SKILL.md) | Example Mapping | Explore rules and edge cases |
+| [askwhy](skills/askwhy/SKILL.md) | Socratic questioning | Challenge assumptions |
+| [setcriteria](skills/setcriteria/SKILL.md) | BDD | Define testable acceptance criteria |
+| [checkstory](skills/checkstory/SKILL.md) | INVEST | Review story quality |
+| [setpriority](skills/setpriority/SKILL.md) | MoSCoW | Clarify release priorities |
 
-## Install
+## Installation with CLI
 
-Clone the repository, then copy only the skills you want.
+**Note:** The npm package is not published yet. Until then, clone this repository and use the CLI locally.
 
 ```bash
 git clone https://github.com/aqeeljavedqureshi/cskills.git
 cd cskills
-
-# OpenCode: project-level installation
-mkdir -p /path/to/your-project/.opencode/skills
-cp -R skills/askmore /path/to/your-project/.opencode/skills/
+node bin/cskills.js list
+node bin/cskills.js install checkstory
 ```
 
-For user-wide OpenCode skills, use `~/.config/opencode/skills/`. Other Agent Skills-compatible clients use their own supported skills directories.
+Once the package has been published to npm, equivalent commands can use `npx cskills`:
 
-## Use
+```bash
+npx cskills list
+npx cskills agents
+npx cskills install checkstory
+npx cskills install --all
+npx cskills install askmore whatif
+npx cskills install checkstory --local
+npx cskills install checkstory --agent claude-code
+npx cskills install --all --agent cursor,opencode --local
+```
 
-Ask your agent to use a skill by name, for example:
+### Default install location
 
-> Use askmore to clarify this Jira story. Ask up to three important questions at a time and wait for my answers.
+**Global by default:** `~/.agents/skills/<skill>/SKILL.md`
 
-> Use checkstory to assess this story against INVEST. Distinguish proven risks from unknowns.
+**Project-local with `--local`:** `./.agents/skills/<skill>/SKILL.md`
 
-**Each skill works independently.** You can use one skill without running any others. A slash-command alias such as `/askmore` is available only if your agent client configures one; skill names alone do not guarantee slash commands.
+The shared location is agent-agnostic. Individual AI coding tools must support discovering this directory, or you should select a tool-specific directory with `--agent`.
 
-## Interactive behavior
+### Agent-specific installation
 
-1. Analyze the story and any available evidence.
-2. Ask up to three high-impact questions per round if important decisions are unresolved.
-3. Wait for the user to answer; never fabricate business decisions.
-4. Update the result and stop once the skill's objective is sufficiently clear.
+Use `--agent <name>` to choose installation directories; use `--local` for the repository/project-level path.
 
-Skills produce their own focused outputs rather than automatically invoking other skills.
+| Agent target | Project-local directory | User-wide directory |
+| --- | --- | --- |
+| `universal` (default) | `.agents/skills` | `~/.agents/skills` |
+| `codex` | `.agents/skills` | `~/.agents/skills` |
+| `claude-code` | `.claude/skills` | `~/.claude/skills` |
+| `cursor` | `.cursor/skills` | `~/.cursor/skills` |
+| `gemini-cli` | `.gemini/skills` | `~/.gemini/skills` |
+| `github-copilot` | `.github/skills` | `~/.copilot/skills` |
+| `opencode` | `.opencode/skills` | `~/.config/opencode/skills` |
+| `cline` | `.cline/skills` | `~/.cline/skills` |
+| `roo` | `.roo/skills` | `~/.roo/skills` |
+| `windsurf` | `.windsurf/skills` | `~/.codeium/windsurf/skills` |
+| `kiro` | `.kiro/skills` | `~/.kiro/skills` |
+| `continue` | `.continue/skills` | `~/.continue/skills` |
+| `antigravity` | `.agent/skills` | `~/.gemini/config/skills` |
+| `openhands` | `.agents/skills` | `~/.agents/skills` |
 
-## Example
+Aliases: `claude`, `gemini`, `copilot`, `roo-code`.
 
-**Story:** "As a registered user, I want to sign in using my email and password."
+These paths are CLI installation targets, not a guarantee that every version of every agent automatically discovers all of them. Agent support changes: check your agent's documentation and configure discovery if needed.
 
-| Skill | Example question or result |
-| --- | --- |
-| askmore | What happens when sign-in fails? |
-| checkcontext | Is there an existing authentication API or login flow? |
-| whatif | Explore valid credentials, invalid credentials, and disabled accounts |
-| askwhy | What does “securely” mean for this product? |
-| setcriteria | Given/When/Then for confirmed login outcomes |
-| checkstory | INVEST assessment, with evidence-based Pass / Risk / Unknown |
-| setpriority | Must/Should/Could/Won't only after release priorities are agreed |
+### Safety and flags
 
-## Design principles
+- `--all` installs all bundled skills.
+- `--agent name[,name]` targets one or multiple agents (repeatable).
+- `--local` installs in the current working directory's project configuration.
+- Existing skill folders are **skipped by default**.
+- `--force` **replaces** existing skill directories; use only when you want to overwrite local changes.
+- Unknown skill or agent names fail with an error.
 
-- **Independent:** no skill requires another skill.
-- **Interactive:** ask, wait, and reassess instead of guessing.
-- **Evidence-based:** distinguish verified facts from unknowns.
-- **Focused:** minimize redundant questions and unnecessary output.
-- **Safe boundaries:** no automatic code changes or fabricated requirements.
+## Using skills
+
+Ask an agent to invoke an installed skill, for example:
+
+> Use askmore to clarify this Jira user story. Ask important questions and wait for my answers.
+
+> Use checkstory to review this story with INVEST and distinguish risks from unknowns.
+
+Each skill is **independent**. No orchestration skill, other skill, or remote service is required. A skill name is not automatically a slash command; command support depends on your agent.
+
+### Interactive approach
+
+1. Analyze available story context and evidence.
+2. Ask up to three important questions per round.
+3. Wait for stakeholder answers rather than guessing.
+4. Reassess and stop when the skill's goal is satisfied.
+
+## Development
+
+Requires Node.js 18.17 or newer.
+
+```bash
+npm test
+npm pack --dry-run
+```
+
+CI validates tests and packaging on supported Node.js versions. npm registry publication is a separate operation that requires package-name availability and npm publishing credentials.
 
 ## License
 
